@@ -1,8 +1,8 @@
 const ENTER_KEYCODE = 13;
 
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('.form');
   const items = document.querySelector('.items');
+  const form = document.querySelector('.form');
 
   text.init(form, items);  
 });
@@ -13,17 +13,17 @@ const text = (() => {
   
   function init(_form, _items) {
     items = _items;
-    
-    for (let item of items.querySelectorAll('.item__checkbox')) {
-      item.addEventListener('click', finish);
-    } 
-    for (let item of items.querySelectorAll('.item__text')) {
-      item.addEventListener('click', edit);
-    }
+
     for (let item of items.querySelectorAll('.item__button')) {
       item.addEventListener('click', deleteItem);
     }
-
+    for (let item of items.querySelectorAll('.item__text')) {
+      item.addEventListener('click', edit);
+    }
+    for (let item of items.querySelectorAll('.item__checkbox')) {
+      item.addEventListener('click', finish);
+    } 
+    
     _form.addEventListener('submit', formHandler);
     
 
@@ -40,17 +40,19 @@ const text = (() => {
     if (isNullOrEmpty(input)) {
       return;
     }
-    
+
     add();
-    for (let item of items.querySelectorAll('.item__checkbox')) {
-      item.addEventListener('click', finish);
+
+    for (let item of items.querySelectorAll('.item__button')) {
+      item.addEventListener('click', deleteItem);
     } 
     for (let item of items.querySelectorAll('.item__text')) {
       item.addEventListener('click', edit);
     }
-    for (let item of items.querySelectorAll('.item__button')) {
-      item.addEventListener('click', deleteItem);
-    }
+    for (let item of items.querySelectorAll('.item__checkbox')) {
+      item.addEventListener('click', finish);
+    } 
+    
     
     e.target.reset();
     console.log('halló heimur');
@@ -63,7 +65,6 @@ const text = (() => {
     } else {
       e.target.parentElement.className = 'item';
     }
-    console.log('Finish changes')
   }
   
   // event handler fyrir það að breyta færslu
@@ -71,14 +72,14 @@ const text = (() => {
 
     let value = e.target.innerText;
        
-    
-    let newForm = document.createElement("form");
-    newForm.className = "item__edit";
-    
-    let change = document.createElement("input");
+     let change = document.createElement("input");
     change.type = "text";
     change.className = "text__input";
 
+    let newForm = document.createElement("form");
+    newForm.className = "item__edit";
+    
+   
     change.value = value;
 
     
@@ -86,8 +87,6 @@ const text = (() => {
     e.target.replaceWith(newForm);
 
     newForm.addEventListener('submit', commit);
-
-    console.log('Changes started');
   }
   
   // event handler fyrir það að klára að breyta færslu
@@ -104,24 +103,22 @@ const text = (() => {
     e.target.replaceWith(newSpan);
     newSpan.addEventListener('click', edit);
 
-    console.log(value);
-
-    console.log('Committed');
+  
   }
   
   // fall sem sér um að bæta við nýju item
   function add(value) {
-    
-    let input = document.querySelector('.form__input').value;
-    
-    let li =    document.createElement("li");
-    li.className = "item";
-    
+
     let box = document.createElement("input");
     box.type = "checkbox";
     box.className = "item__checkbox";
+
+    let input = document.querySelector('.form__input').value;
     
     let span = document.createElement("span");
+    
+    let li =    document.createElement("li");
+    li.className = "item";
     
     span.className = "item__text";
     span.appendChild(document.createTextNode(input));
@@ -135,8 +132,6 @@ const text = (() => {
     li.appendChild(button);
     
     items.appendChild(li);
-    
-    console.log(input);
   }
   
   // event handler til að eyða færslu
